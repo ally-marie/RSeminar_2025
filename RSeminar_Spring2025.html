@@ -10,7 +10,7 @@
 
 
 
-<meta name="date" content="2025-01-29" />
+<meta name="date" content="2025-02-12" />
 
 <title>R Seminar</title>
 
@@ -351,7 +351,7 @@ display: none;
 
 <h1 class="title toc-ignore">R Seminar</h1>
 <h3 class="subtitle">Spring 2025</h3>
-<h4 class="date">2025-01-29</h4>
+<h4 class="date">2025-02-12</h4>
 
 </div>
 
@@ -575,6 +575,245 @@ over ranges in loops.</p></li>
 ## [51] 52 53 54 55</code></pre>
 <pre class="r"><code>10:1</code></pre>
 <pre><code>##  [1] 10  9  8  7  6  5  4  3  2  1</code></pre>
+<p><br> <br></p>
+</div>
+</div>
+<div id="week-2" class="section level1">
+<h1>Week 2</h1>
+<div id="understanding-r-packages" class="section level2">
+<h2>Understanding R Packages</h2>
+<p>In R, packages are collections of functions, data, and compiled code
+that extend the base functionality of R. You can make your own package
+if you wanted to!</p>
+<ul>
+<li><strong>Packages provide specialized functions that are not
+available in base R.</strong></li>
+<li>Many packages are developed and maintained by others in the R
+world—this can be good or bad depending on how well they are updated and
+maintained.</li>
+<li>Leveraging existing packages can significantly reduce the time and
+effort required to implement complex analyses.</li>
+</ul>
+<div id="loading-packages" class="section level3">
+<h3>Loading Packages</h3>
+<p>To install a package, use the <code>install.packages()</code>
+function:</p>
+<pre class="r"><code>install.packages(&quot;tidyverse&quot;)</code></pre>
+<p>This is a one-time action, typically done per R installation or when
+updating a package.</p>
+<p>Once installed, load the package into your R session with
+<code>library()</code>:</p>
+<pre class="r"><code>library(tidyverse)</code></pre>
+</div>
+<div id="key-points" class="section level3">
+<h3>Key Points:</h3>
+<ul>
+<li>You need to load the package for each new R session.</li>
+<li>Even after installation, a package’s functions remain inaccessible
+until explicitly loaded.</li>
+<li>Loading packages consumes memory, so only load what you need.</li>
+</ul>
+</div>
+<div id="function-name-clashes" class="section level3">
+<h3>Function Name Clashes</h3>
+<p>Loading multiple packages that have functions with the same name can
+lead to conflicts. Use the <code>::</code> operator to specify which
+function to use:</p>
+<pre class="r"><code>library(dplyr)
+library(MASS) # Both have a &#39;select&#39; function
+
+dplyr::select(data, column)
+MASS::select(data, column)</code></pre>
+<p>Using namespace prefixes can reduce memory usage and prevent function
+conflicts.</p>
+</div>
+<div id="you-can-cite-packages-you-use-in-papersmethods-sections" class="section level3">
+<h3>You can cite packages you use in papers/methods sections</h3>
+<pre class="r"><code>citation(&quot;tidyverse&quot;)</code></pre>
+<p><br> <br></p>
+</div>
+</div>
+<div id="data-types-in-r" class="section level2">
+<h2>Data Types in R</h2>
+<ul>
+<li><strong>Numeric</strong>: Represents numbers (e.g., 42, 3.14)</li>
+<li><strong>Character</strong>: Strings of text (e.g., “Hello”)</li>
+<li><strong>Logical</strong>: Boolean values (TRUE, FALSE)</li>
+</ul>
+<pre class="r"><code>num &lt;- 13
+char &lt;- &quot;A bear!&quot;
+dobby &lt;- TRUE</code></pre>
+<p><br></p>
+</div>
+<div id="data-structures" class="section level2">
+<h2>Data Structures</h2>
+<div id="vectors" class="section level3">
+<h3>Vectors</h3>
+<p><strong>Vectors are homogeneous (all elements must be of the same
+type).</strong></p>
+<pre class="r"><code>numeric_vector &lt;- c(1, 2, 3)
+char_vector &lt;- c(&quot;apple&quot;, &quot;banana&quot;, &quot;cherry&quot;)
+logical_vector &lt;- c(TRUE, FALSE, TRUE)</code></pre>
+<div id="combining-vectors" class="section level4">
+<h4>Combining vectors:</h4>
+<pre class="r"><code>odds &lt;- c(1, 3, 5)
+odds + numeric_vector</code></pre>
+</div>
+</div>
+<div id="data-frames" class="section level3">
+<h3>Data Frames</h3>
+<p><strong>Data frames are two-dimensional tables where columns can have
+different data types.</strong></p>
+<pre class="r"><code>df &lt;- data.frame(a = numeric_vector, b = char_vector)
+df$a</code></pre>
+<p><br></p>
+</div>
+</div>
+<div id="reading-data-into-r" class="section level2">
+<h2>Reading Data into R</h2>
+<div id="file-pathways" class="section level3">
+<h3>File Pathways</h3>
+<p>To load a file into R, specify the correct file path.</p>
+<div id="file-pathway-on-mac" class="section level4">
+<h4>File pathway on Mac</h4>
+<p>Using Finder:</p>
+<ul>
+<li>Open Finder and navigate to the file whose path you want to
+copy.</li>
+<li>Right-click (or Control-click) on the file.</li>
+<li>Hold down the Option key, and you will see the “Copy” option change
+to “Copy [file name] as Pathname.”</li>
+<li>Click on “Copy [file name] as Pathname” to copy the full file path
+to your clipboard.</li>
+</ul>
+</div>
+<div id="file-pathway-on-pc" class="section level4">
+<h4>File pathway on PC</h4>
+<p>Using File Explorer:</p>
+<ul>
+<li>Open File Explorer and navigate to the file whose path you want to
+copy.</li>
+<li>Right-click on the file while holding the Shift key.</li>
+<li>Select “Copy as path” from the context menu. This will copy the full
+file path to your clipboard.</li>
+</ul>
+<p>Using the Address Bar:</p>
+<ul>
+<li>Navigate to the folder containing your file in File Explorer.</li>
+<li>Click on the address bar to reveal the full path.</li>
+<li>You can then manually append the file name to the path if
+needed.</li>
+</ul>
+</div>
+</div>
+<div id="csv-format" class="section level3">
+<h3>CSV format</h3>
+<p>A CSV (Comma-Separated Values) file is a simple text format used to
+store tabular data. Each line in a CSV file represents a row in the
+table, and each value within the row is separated by a comma.</p>
+<div id="why-use-csv-files" class="section level4">
+<h4>Why Use CSV Files?</h4>
+<ul>
+<li>CSV files are plain text, making them easy to create and edit with
+any text editor. They do not require special software to open, unlike
+proprietary formats like Excel.</li>
+<li>CSV files are supported by almost all data processing software,
+including spreadsheets, databases, and programming languages.</li>
+<li>CSV files are lightweight and have a smaller file size compared to
+formats that include additional metadata or formatting, such as Excel.
+This can lead to faster data processing and reduced storage
+requirements.</li>
+</ul>
+</div>
+<div id="saving-an-excel-file-as-a-csv" class="section level4">
+<h4>Saving an excel file as a CSV</h4>
+<p>Steps to Save as CSV:</p>
+<ol style="list-style-type: decimal">
+<li><strong>Open the Excel File</strong>: Launch Microsoft Excel and
+open the workbook you want to convert to a CSV file.</li>
+<li><strong>Select the Worksheet</strong>: Ensure that the worksheet you
+want to save as a CSV is active. Note that only the active worksheet
+will be saved in the CSV format.</li>
+<li><strong>Save As CSV</strong>:</li>
+</ol>
+<ul>
+<li>Click on File in the menu bar.</li>
+<li>Select Save As or Save a Copy (depending on your version of
+Excel).</li>
+<li>Choose the location where you want to save the file.</li>
+<li>In the Save as type dropdown menu, select CSV (Comma delimited)
+(*.csv).</li>
+<li>Enter a name for your file and click Save.</li>
+</ul>
+<ol start="4" style="list-style-type: decimal">
+<li><strong>Confirm and Close</strong>: Excel may prompt you with a
+warning that some features in your workbook might be lost if you save it
+as a CSV. This is because CSV files do not support multiple sheets,
+formulas, or formatting. Click OK to proceed. You will NOT lose your
+excel file!</li>
+</ol>
+</div>
+</div>
+<div id="reading-a-csv" class="section level3">
+<h3>Reading a CSV</h3>
+<pre class="r"><code>data_csv &lt;- read.csv(&quot;C:/Users/ag24bc/Documents/FSU/R seminar/Spring 25/Data/bonaire_2023_fish_counts_seminar.csv&quot;)</code></pre>
+</div>
+<div id="reading-an-excel-file" class="section level3">
+<h3>Reading an Excel File</h3>
+<p>Install and load the <code>readxl</code> package:</p>
+<pre class="r"><code>install.packages(&quot;readxl&quot;)
+library(readxl)
+
+data_excel &lt;- read_excel(&quot;C:/Users/ag24bc/Documents/FSU/R seminar/Spring 25/Data/bonaire_2023_fish_counts_seminar.xlsx&quot;, sheet = &quot;Sheet1&quot;)</code></pre>
+</div>
+</div>
+<div id="exploring-data" class="section level2">
+<h2>Exploring Data</h2>
+<div id="understanding-data-structure" class="section level3">
+<h3>Understanding Data Structure</h3>
+<p>The <code>str()</code> function provides a compact, human-readable
+summary of the structure of an object, including data types and sample
+values.</p>
+<pre class="r"><code>str(data_csv)</code></pre>
+</div>
+<div id="summary-statistics" class="section level3">
+<h3>Summary Statistics</h3>
+<p>The <code>summary()</code> function generates a quick statistical
+summary of each column in a dataset, including min, max, mean, and
+quartiles.</p>
+<pre class="r"><code>summary(data_csv)</code></pre>
+</div>
+<div id="number-of-rows" class="section level3">
+<h3>Number of Rows</h3>
+<p>The <code>nrow()</code> function returns the number of rows in a data
+frame.</p>
+<pre class="r"><code>nrow(data_csv)</code></pre>
+</div>
+<div id="number-of-columns" class="section level3">
+<h3>Number of Columns</h3>
+<p>The <code>ncol()</code> function returns the number of columns in a
+data frame.</p>
+<pre class="r"><code>ncol(data_csv)</code></pre>
+</div>
+<div id="viewing-the-first-few-rows" class="section level3">
+<h3>Viewing the First Few Rows</h3>
+<p>The <code>head()</code> function displays the first few rows of a
+dataset.</p>
+<pre class="r"><code>tail(data_csv)</code></pre>
+</div>
+<div id="viewing-the-last-few-rows" class="section level3">
+<h3>Viewing the Last Few Rows</h3>
+<p>The <code>tail()</code> function displays the last few rows of a
+dataset, useful for checking data completeness or the most recent
+records.</p>
+<pre class="r"><code>tail(data_csv)</code></pre>
+</div>
+<div id="viewing-column-names" class="section level3">
+<h3>Viewing Column Names</h3>
+<p>The <code>colnames()</code> function displays the column names of the
+dataset</p>
+<pre class="r"><code>colnames(data_csv)</code></pre>
+</div>
 </div>
 </div>
 
