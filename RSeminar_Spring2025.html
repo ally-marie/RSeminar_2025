@@ -10,7 +10,7 @@
 
 
 
-<meta name="date" content="2025-02-12" />
+<meta name="date" content="2025-02-13" />
 
 <title>R Seminar</title>
 
@@ -351,7 +351,7 @@ display: none;
 
 <h1 class="title toc-ignore">R Seminar</h1>
 <h3 class="subtitle">Spring 2025</h3>
-<h4 class="date">2025-02-12</h4>
+<h4 class="date">2025-02-13</h4>
 
 </div>
 
@@ -813,6 +813,427 @@ records.</p>
 <p>The <code>colnames()</code> function displays the column names of the
 dataset</p>
 <pre class="r"><code>colnames(data_csv)</code></pre>
+</div>
+</div>
+</div>
+<div id="week-3" class="section level1">
+<h1>Week 3</h1>
+<div id="loading-data" class="section level2">
+<h2>Loading Data</h2>
+<p>It’s important to give your dataframe a descriptive name that
+reflects its contents, rather than a generic name like ‘data’. For
+naming conventions, it is common to use underscores (_) when naming
+objects in your environment. Function names usually use dots (.) -
+example: install.packages(). <strong>Be consistent in your
+work!</strong></p>
+<pre class="r"><code>bonaire_fish_counts &lt;- read.csv(&quot;/Users/allyiscool/Desktop/R seminar - spring 2025/bonaire_2023_fish_counts_seminar.csv&quot;)</code></pre>
+<p>The <code>$</code> operator allows you to access a specific column
+from a dataframe. Since each column in a dataframe is essentially a
+vector, using <code>$</code> lets you extract that column and work with
+it as a standalone vector.</p>
+<p>Notice that RStudio’s auto-complete feature can help you fill in
+column names after typing the $ symbol.</p>
+<pre class="r"><code>bonaire_fish_counts  # Displays the entire dataframe</code></pre>
+<pre class="r"><code>bonaire_fish_counts$Site  # Access only the &#39;Site&#39; column
+site_column &lt;- bonaire_fish_counts$Site  # Save the column as a variable </code></pre>
+<p>Notice how when you save the column, it is treated as a vector in the
+Values column!</p>
+</div>
+<div id="base-r-functions" class="section level2">
+<h2>Base R Functions</h2>
+<div id="unique-values" class="section level3">
+<h3>Unique Values</h3>
+<p>The <code>unique()</code> function identifies all unique entries in a
+vector or column. This is useful for data validation and checking for
+unexpected or erroneous values. I also use it for for loops a lot.</p>
+<pre class="r"><code>unique(bonaire_fish_counts$Species)  # Find unique species</code></pre>
+<pre><code>##  [1] &quot;Princess parrrotfish&quot;   &quot;Ocean surgeonfish&quot;      &quot;Redband parrotfish&quot;    
+##  [4] &quot;Foureye butterflyfish&quot;  &quot;Queen parrotfish&quot;       &quot;Blue tang&quot;             
+##  [7] &quot;Orangespotted filefish&quot; &quot;Stoplight parrotfish&quot;   &quot;Striped parrotfish&quot;    
+## [10] &quot;Banded butterflyfish&quot;   &quot;Yellowtail hamlet&quot;      &quot;Barred hamlet&quot;         
+## [13] &quot;Saddled parrotfish&quot;     &quot;No Fish&quot;                &quot;Butter hamlet&quot;         
+## [16] NA                       &quot;Black durgon&quot;           &quot;Spotfin butterflyfish&quot; 
+## [19] &quot;Yellowtail parrotfish&quot;  &quot;Redtail parrotfish&quot;     &quot;Black hamlet?&quot;         
+## [22] &quot;Doctorfish&quot;             &quot;Goldentail moray&quot;       &quot;Eel&quot;                   
+## [25] &quot;Hamlet&quot;                 &quot;Whitespotted filefish&quot;  &quot;Eagle ray&quot;             
+## [28] &quot;Squid&quot;                  &quot;Turtle&quot;                 &quot;  &quot;</code></pre>
+</div>
+<div id="frequency-tables" class="section level3">
+<h3>Frequency Tables</h3>
+<p>The <code>table()</code> function creates frequency tables, which
+count the occurrences of each unique value in a vector or combination of
+vectors</p>
+<p>This will output a table showing how many times each species appears
+in the dataset.</p>
+<pre class="r"><code>table(bonaire_fish_counts$Species)  # Frequency of each species</code></pre>
+<pre><code>## 
+##                          Banded butterflyfish          Barred hamlet 
+##                      1                     34                      9 
+##           Black durgon          Black hamlet?              Blue tang 
+##                     13                      1                    154 
+##          Butter hamlet             Doctorfish              Eagle ray 
+##                      6                     23                      1 
+##                    Eel  Foureye butterflyfish       Goldentail moray 
+##                      2                    161                      1 
+##                 Hamlet                No Fish      Ocean surgeonfish 
+##                      1                     11                    248 
+## Orangespotted filefish   Princess parrrotfish       Queen parrotfish 
+##                     31                    367                    150 
+##     Redband parrotfish     Redtail parrotfish     Saddled parrotfish 
+##                    257                      3                      3 
+##  Spotfin butterflyfish                  Squid   Stoplight parrotfish 
+##                      6                      1                    271 
+##     Striped parrotfish                 Turtle  Whitespotted filefish 
+##                    191                      1                      4 
+##      Yellowtail hamlet  Yellowtail parrotfish 
+##                     20                      4</code></pre>
+<p>This will output a table showing how many times each species appears
+at each site.</p>
+<pre class="r"><code>table(bonaire_fish_counts$Species, bonaire_fish_counts$Site)  # Frequency of species by site</code></pre>
+<pre><code>##                         
+##                          AngelCity MargateBay PinkBeach PuntVierkant SaltCity
+##                                  0          0         1            0        0
+##   Banded butterflyfish           4          5         5            7        5
+##   Barred hamlet                  0          4         1            1        2
+##   Black durgon                   0          0         7            0        0
+##   Black hamlet?                  0          1         0            0        0
+##   Blue tang                     35         15        26           25       22
+##   Butter hamlet                  0          0         2            1        0
+##   Doctorfish                     7          2         4            0       10
+##   Eagle ray                      0          0         0            0        1
+##   Eel                            1          1         0            0        0
+##   Foureye butterflyfish         18         28        35           24       21
+##   Goldentail moray               0          1         0            0        0
+##   Hamlet                         1          0         0            0        0
+##   No Fish                        3          0         2            2        1
+##   Ocean surgeonfish             48         22        36           33       30
+##   Orangespotted filefish        16          0         0            3        5
+##   Princess parrrotfish          55         38        48           49       74
+##   Queen parrotfish              50         17         9           13       20
+##   Redband parrotfish            34         32        43           43       45
+##   Redtail parrotfish             0          0         0            0        2
+##   Saddled parrotfish             0          0         0            1        2
+##   Spotfin butterflyfish          1          0         0            0        0
+##   Squid                          0          0         0            0        1
+##   Stoplight parrotfish          50         45        36           42       51
+##   Striped parrotfish            21          6        25           32       46
+##   Turtle                         0          0         0            0        1
+##   Whitespotted filefish          2          0         0            0        2
+##   Yellowtail hamlet              3          0         1            4        5
+##   Yellowtail parrotfish          0          0         0            0        0
+##                         
+##                          SaltPier TorisReef
+##                                 0         0
+##   Banded butterflyfish          5         3
+##   Barred hamlet                 1         0
+##   Black durgon                  0         6
+##   Black hamlet?                 0         0
+##   Blue tang                    12        19
+##   Butter hamlet                 3         0
+##   Doctorfish                    0         0
+##   Eagle ray                     0         0
+##   Eel                           0         0
+##   Foureye butterflyfish        21        14
+##   Goldentail moray              0         0
+##   Hamlet                        0         0
+##   No Fish                       0         3
+##   Ocean surgeonfish            46        33
+##   Orangespotted filefish        6         1
+##   Princess parrrotfish         50        53
+##   Queen parrotfish             27        14
+##   Redband parrotfish           27        33
+##   Redtail parrotfish            1         0
+##   Saddled parrotfish            0         0
+##   Spotfin butterflyfish         4         1
+##   Squid                         0         0
+##   Stoplight parrotfish         29        18
+##   Striped parrotfish           33        28
+##   Turtle                        0         0
+##   Whitespotted filefish         0         0
+##   Yellowtail hamlet             3         4
+##   Yellowtail parrotfish         4         0</code></pre>
+<p>The output in the console can be difficult to read, especially if
+there are many species and sites. To make it easier to work with, we can
+save the table as an object in our environment.</p>
+<pre class="r"><code>species_by_site &lt;- table(bonaire_fish_counts$Species, bonaire_fish_counts$Site)</code></pre>
+<p>By saving the table as an object, it appears in the ‘Values’ section
+of our R environment. However, it can still only be viewed in a
+matrix-like format in the console, which still sucks :(</p>
+<p>We can convert the table to a dataframe for easier viewing and
+manipulation using <code>as.data.frame()</code></p>
+<pre class="r"><code>species_by_site_df &lt;- as.data.frame(species_by_site)</code></pre>
+<p>Alternatively, you can replace the original table object with the
+dataframe object by naming it the same thing:</p>
+<pre class="r"><code>species_by_site &lt;- as.data.frame(species_by_site)</code></pre>
+<p>By reassigning the dataframe to the original object name, we maintain
+a single object in our environment, helping to keep the workspace
+organized and not bloated</p>
+<div id="table-vs.-dataframe" class="section level4">
+<h4>Table vs. Dataframe:</h4>
+<ul>
+<li>Dataframes are more flexible and easier to manipulate, allowing for
+operations like filtering and sorting</li>
+<li>A table object is a matrix-like structure that is efficient for
+counting and summarizing data.</li>
+<li>A dataframe object is more versatile, allowing for operations like
+filtering and sorting</li>
+</ul>
+<pre class="r"><code># Frequency of species by site and stage
+species_site_stage_count &lt;- table(bonaire_fish_counts$Site, 
+                                  bonaire_fish_counts$Species, 
+                                  bonaire_fish_counts$Stage)
+species_site_stage_count &lt;- as.data.frame(species_site_stage_count)</code></pre>
+<p><em>quick tip</em>: I like to add a line break after commas within
+functions because it is enhances readability:</p>
+<pre class="r"><code>#without line breaks
+result &lt;- some_function(arg1, arg2, arg3, arg4, arg5)
+
+# with line breaks
+result &lt;- some_function(
+    arg1,
+    arg2,
+    arg3,
+    arg4,
+    arg5
+)</code></pre>
+</div>
+<div id="proportions" class="section level4">
+<h4>Proportions</h4>
+<p>The <code>prop.table()</code> function converts frequency tables into
+proportions to understand relative frequencies.</p>
+<pre class="r"><code>species_proportion &lt;- prop.table(table(bonaire_fish_counts$Species))
+species_proportion &lt;- as.data.frame(species_proportion)</code></pre>
+</div>
+</div>
+</div>
+<div id="date-conversion" class="section level2">
+<h2>Date Conversion</h2>
+<p>Turning a date or time column into a date-time format instead of
+character using <code>as.POSIXct()</code> ensures consistency and allows
+for calculations and comparisons.</p>
+<pre class="r"><code>bonaire_fish_counts$Date &lt;- as.POSIXct(bonaire_fish_counts$Date, format = &quot;%m/%d/%y&quot;)</code></pre>
+<p>Explanation of the format argument:</p>
+<ul>
+<li><code>%m</code>: Month as a decimal number (01-12)</li>
+<li><code>%d</code>: Day of the month as a decimal number (01-31)</li>
+<li><code>%y</code>: Year without century (00-99)</li>
+</ul>
+<p>This format string tells R how to interpret the components of the
+date character string</p>
+<p>Notice we are assigning new data to a column using the same column
+name meaning we are effectively overwrite the existing data in that
+column. This operation updates the dataframe in place, replacing the old
+values with the new ones.</p>
+<p><br></p>
+</div>
+<div id="basic-statistics" class="section level2">
+<h2>Basic Statistics</h2>
+<div id="mean-size-of-fish" class="section level3">
+<h3>mean size of fish</h3>
+<pre class="r"><code>mean(bonaire_fish_counts$Size)</code></pre>
+<pre><code>## [1] NA</code></pre>
+<p>Notice how it returns an NA value - NAs are trump cards, if there is
+an NA in your column when you are trying to do these basic summary
+stats, it will always return an NA!</p>
+<p><strong>use na.rm</strong>: this argument stands for “NA remove” and
+is used to specify whether NA values should be removed before performing
+the calculation</p>
+<p>setting <code>na.rm = TRUE</code> tells the function to ignore NA
+values and compute the mean using only the available (non-missing)
+data.</p>
+<pre class="r"><code>mean(bonaire_fish_counts$Size, na.rm =TRUE)</code></pre>
+<pre><code>## [1] 16.45634</code></pre>
+</div>
+<div id="standard-deviation-of-fish-size" class="section level3">
+<h3>standard deviation of fish size</h3>
+<pre class="r"><code>sd(bonaire_fish_counts$Size, na.rm=TRUE)</code></pre>
+<pre><code>## [1] 5.918731</code></pre>
+</div>
+<div id="minimum-maximum-of-fish-size" class="section level3">
+<h3>minimum / maximum of fish size</h3>
+<pre class="r"><code>min(bonaire_fish_counts$Size, na.rm=TRUE)</code></pre>
+<pre><code>## [1] 2</code></pre>
+<pre class="r"><code>max(bonaire_fish_counts$Size, na.rm=TRUE)</code></pre>
+<pre><code>## [1] 41</code></pre>
+</div>
+<div id="median-size-of-fish" class="section level3">
+<h3>median size of fish</h3>
+<pre class="r"><code>median(bonaire_fish_counts$Size, na.rm=TRUE)</code></pre>
+<pre><code>## [1] 16</code></pre>
+</div>
+<div id="number-of-elements-in-a-vector" class="section level3">
+<h3>number of elements in a vector</h3>
+<p>Effectively this is just the number of rows/observations, so it isn’t
+too useful on it’s own often, but I will use it in the context of other
+tasks (for loops) or functions</p>
+<pre class="r"><code>length(bonaire_fish_counts$Size)  # Number of rows/observations</code></pre>
+<pre><code>## [1] 1979</code></pre>
+</div>
+<div id="quantiles" class="section level3">
+<h3>quantiles</h3>
+<pre class="r"><code>quantile(bonaire_fish_counts$Size) ## errors because there are NAs</code></pre>
+<pre class="r"><code>quantile(bonaire_fish_counts$Size, na.rm = TRUE)</code></pre>
+<pre><code>##   0%  25%  50%  75% 100% 
+##    2   14   16   19   41</code></pre>
+<p>You can also specify which quantiles you want to look at with the
+<code>probs</code> argument</p>
+<pre class="r"><code>quantile(bonaire_fish_counts$Size, probs = c(0.25, 0.5, 0.75), na.rm = TRUE)</code></pre>
+<pre><code>## 25% 50% 75% 
+##  14  16  19</code></pre>
+<pre class="r"><code>quantile(bonaire_fish_counts$Size, probs = c(0.95, 0.99), na.rm = TRUE)</code></pre>
+<pre><code>## 95% 99% 
+##  27  35</code></pre>
+<p><br> <br></p>
+</div>
+</div>
+<div id="tidyverse" class="section level2">
+<h2>Tidyverse</h2>
+<p>The <code>tidyverse</code> is a package of R packages designed for
+data science. The tidyverse is built around the concept of “tidy data,”
+where each variable is a column, each observation is a row, and each
+type of observational unit forms a table.</p>
+<ul>
+<li>The tidyverse includes a suite of packages that work seamlessly
+together, such as <code>dplyr</code> for data manipulation,
+<code>ggplot2</code> for data visualization, <code>tidyr</code> for data
+tidying, and <code>readr</code> for data import.</li>
+</ul>
+<p><strong>Piping with %&gt;%</strong>: The magrittr package, part of
+the tidyverse, introduces the pipe operator <code>%&gt;%</code>. It
+allows you to write cleaner and more readable code by chaining together
+a sequence of operations.</p>
+<ul>
+<li>pipe operator shortcut on mac: Command + Shift + M</li>
+<li>pipe operator shortcut on pc: Ctrl + Shift + M</li>
+</ul>
+<p><strong>What is %&gt;% Piping?</strong> Imagine you have a series of
+tasks you need to perform on a dataset, like filtering, selecting
+columns, and summarizing data. You could write these tasks as separate
+steps, each one modifying the data and then passing it to the next
+step.</p>
+<p>The pipe operator <code>%&gt;%</code> lets you connect these steps in
+a single, continuous flow, making your code look more like a series of
+instructions.</p>
+<ul>
+<li>Think of it as “then”: The <code>%&gt;%</code> operator can be read
+as “then.” It takes the output of one function and passes it as the
+input to the next function. This makes it easy to follow the sequence of
+operations.</li>
+</ul>
+<pre class="r"><code>#install.packages(&quot;tidyverse&quot;)
+library(tidyverse)</code></pre>
+<div id="data-overview" class="section level3">
+<h3>Data Overview</h3>
+<p>The <code>glimpse()</code> function provides a structured overview of
+the dataframe, including data types and sample values.</p>
+<pre class="r"><code>glimpse(bonaire_fish_counts)</code></pre>
+<pre><code>## Rows: 1,979
+## Columns: 7
+## $ Site        &lt;chr&gt; &quot;PuntVierkant&quot;, &quot;PuntVierkant&quot;, &quot;PuntVierkant&quot;, &quot;PuntVierk…
+## $ Date        &lt;dttm&gt; 2023-07-27, 2023-07-27, 2023-07-27, 2023-07-27, 2023-07-2…
+## $ Survey_code &lt;chr&gt; &quot;AD_PV_01&quot;, &quot;AD_PV_01&quot;, &quot;AD_PV_01&quot;, &quot;AD_PV_01&quot;, &quot;AD_PV_01&quot;…
+## $ Species     &lt;chr&gt; &quot;Princess parrrotfish&quot;, &quot;Ocean surgeonfish&quot;, &quot;Redband parr…
+## $ Size        &lt;int&gt; 14, 16, 33, 19, 6, 17, 14, 16, 6, 7, 13, 14, 6, 41, 7, 20,…
+## $ Number      &lt;chr&gt; &quot;1&quot;, &quot;1&quot;, &quot;1&quot;, &quot;1&quot;, &quot;1&quot;, &quot;1&quot;, &quot;1&quot;, &quot;1&quot;, &quot;1&quot;, &quot;1&quot;, &quot;1&quot;, &quot;1&quot;…
+## $ Stage       &lt;chr&gt; &quot;&quot;, &quot;&quot;, &quot;TP&quot;, &quot;TP&quot;, &quot;&quot;, &quot;&quot;, &quot;&quot;, &quot;&quot;, &quot;&quot;, &quot;&quot;, &quot;&quot;, &quot;&quot;, &quot;&quot;, &quot;T…</code></pre>
+</div>
+<div id="filtering-data" class="section level3">
+<h3>Filtering Data</h3>
+<p>Use <code>filter()</code> to subset the dataframe based on
+conditions.</p>
+<pre class="r"><code>unique(bonaire_fish_counts$Site) ## use unique to help you copy and paste the character strings</code></pre>
+<pre><code>## [1] &quot;PuntVierkant&quot; &quot;TorisReef&quot;    &quot;SaltPier&quot;     &quot;MargateBay&quot;   &quot;AngelCity&quot;   
+## [6] &quot;SaltCity&quot;     &quot;PinkBeach&quot;</code></pre>
+<div id="create-a-dataframe-that-contains-only-entries-from-the-site-angel-city" class="section level4">
+<h4>Create a dataframe that contains only entries from the site Angel
+City</h4>
+<pre class="r"><code>angel_city &lt;- bonaire_fish_counts %&gt;%
+    dplyr::filter(Site == &quot;AngelCity&quot;)</code></pre>
+<p><em>Note</em>: the column name, even though it is a character string
+does NOT need to be in quotations for these functions</p>
+</div>
+<div id="create-a-dataframe-that-contains-only-entries-of-princess-parrotfish" class="section level4">
+<h4>Create a dataframe that contains only entries of princess
+parrotfish</h4>
+<pre class="r"><code>unique(bonaire_fish_counts$Species)</code></pre>
+<pre><code>##  [1] &quot;Princess parrrotfish&quot;   &quot;Ocean surgeonfish&quot;      &quot;Redband parrotfish&quot;    
+##  [4] &quot;Foureye butterflyfish&quot;  &quot;Queen parrotfish&quot;       &quot;Blue tang&quot;             
+##  [7] &quot;Orangespotted filefish&quot; &quot;Stoplight parrotfish&quot;   &quot;Striped parrotfish&quot;    
+## [10] &quot;Banded butterflyfish&quot;   &quot;Yellowtail hamlet&quot;      &quot;Barred hamlet&quot;         
+## [13] &quot;Saddled parrotfish&quot;     &quot;No Fish&quot;                &quot;Butter hamlet&quot;         
+## [16] NA                       &quot;Black durgon&quot;           &quot;Spotfin butterflyfish&quot; 
+## [19] &quot;Yellowtail parrotfish&quot;  &quot;Redtail parrotfish&quot;     &quot;Black hamlet?&quot;         
+## [22] &quot;Doctorfish&quot;             &quot;Goldentail moray&quot;       &quot;Eel&quot;                   
+## [25] &quot;Hamlet&quot;                 &quot;Whitespotted filefish&quot;  &quot;Eagle ray&quot;             
+## [28] &quot;Squid&quot;                  &quot;Turtle&quot;                 &quot;  &quot;</code></pre>
+<pre class="r"><code>princess_parrotfish &lt;- bonaire_fish_counts %&gt;%
+    filter(Species == &quot;Princess parrrotfish&quot;)</code></pre>
+</div>
+<div id="create-a-dataframe-that-is-all-entries-except-princess-parrotfish" class="section level4">
+<h4>Create a dataframe that is all entries EXCEPT princess
+parrotfish</h4>
+<ul>
+<li>The <code>!=</code> operator means NOT that condition you give it,
+so NOT princess parrotfish, returning everything but princess
+parrotfish</li>
+</ul>
+<pre class="r"><code>NOT_THOSE_UGLY_princess_parrotfish &lt;- bonaire_fish_counts %&gt;%
+    filter(Species != &quot;Princess parrrotfish&quot;)</code></pre>
+</div>
+<div id="create-a-data-frame-of-princess-parrotfish-that-are-larger-than-10cm." class="section level4">
+<h4>Create a data frame of princess parrotfish that are larger than
+10cm.</h4>
+<p>There are multiple ways to do this:</p>
+<div id="i-prefer-to-make-each-filter-its-own-line---this-allows-for-easier-readability-in-my-opinoin-and-if-you-decide-to-change-what-you-are-filtering-out-you-can-easily-comment-out-a-line" class="section level5">
+<h5>I prefer to make each filter it’s own line - this allows for easier
+readability in my opinoin and if you decide to change what you are
+filtering out, you can easily comment out a line:</h5>
+<pre class="r"><code>big_ole_princess &lt;- bonaire_fish_counts %&gt;%
+    filter(Size &gt; 10) %&gt;%
+    filter(Species == &quot;Princess parrrotfish&quot;)
+
+big_ole_princess &lt;- bonaire_fish_counts %&gt;%
+    #filter(Size &gt; 10) %&gt;%
+    filter(Species == &quot;Princess parrrotfish&quot;)</code></pre>
+</div>
+<div id="you-can-also-use-operators-like-and-and-or-to-combine-multiple-conditions-in-a-single-filter" class="section level5">
+<h5>You can also use operators like <code>&amp;</code> (and) and
+<code>|</code> (or) to combine multiple conditions in a single
+filter</h5>
+<ul>
+<li>The <code>&amp;</code> operator is used to apply both conditions
+simultaneously.</li>
+<li>The <code>|</code> operator can be used to apply either
+condition.</li>
+</ul>
+<pre class="r"><code>big_ole_princess &lt;- bonaire_fish_counts %&gt;%
+    filter(Size &gt; 10 &amp; Species == &quot;Princess parrrotfish&quot;) </code></pre>
+</div>
+<div id="create-a-dataframe-that-is-fish-greater-than-10-cm-or-any-princess-parrofish-regardless-of-size" class="section level5">
+<h5>Create a dataframe that is fish greater than 10 cm OR any princess
+parrofish (regardless of size)</h5>
+<pre class="r"><code>princess_OR_big_ole_fish &lt;- bonaire_fish_counts %&gt;%
+    filter(Size &gt; 10 | Species == &quot;Princess parrrotfish&quot;) </code></pre>
+</div>
+</div>
+</div>
+<div id="selecting-columns" class="section level3">
+<h3>Selecting Columns</h3>
+<p>The <code>select()</code> function allows you to choose specific
+columns from a dataframe.</p>
+<p>Use <code>colnames()</code> to display column names to help with
+selection:</p>
+<pre class="r"><code>colnames(bonaire_fish_counts)</code></pre>
+<pre><code>## [1] &quot;Site&quot;        &quot;Date&quot;        &quot;Survey_code&quot; &quot;Species&quot;     &quot;Size&quot;       
+## [6] &quot;Number&quot;      &quot;Stage&quot;</code></pre>
+<div id="create-a-dataframe-with-only-the-stage-column" class="section level4">
+<h4>Create a dataframe with only the “Stage” column</h4>
+<pre class="r"><code>stage_only_df &lt;- bonaire_fish_counts %&gt;% select(Stage)</code></pre>
+</div>
+<div id="create-a-dataframe-with-everything-but-the-stage-column" class="section level4">
+<h4>Create a dataframe with everything BUT the “Stage” column</h4>
+<pre class="r"><code>stage_excluded_df &lt;- bonaire_fish_counts %&gt;% select(-Stage)</code></pre>
+</div>
 </div>
 </div>
 </div>
