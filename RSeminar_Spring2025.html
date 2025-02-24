@@ -10,7 +10,7 @@
 
 
 
-<meta name="date" content="2025-02-13" />
+<meta name="date" content="2025-02-23" />
 
 <title>R Seminar</title>
 
@@ -351,7 +351,7 @@ display: none;
 
 <h1 class="title toc-ignore">R Seminar</h1>
 <h3 class="subtitle">Spring 2025</h3>
-<h4 class="date">2025-02-13</h4>
+<h4 class="date">2025-02-23</h4>
 
 </div>
 
@@ -799,7 +799,7 @@ data frame.</p>
 <h3>Viewing the First Few Rows</h3>
 <p>The <code>head()</code> function displays the first few rows of a
 dataset.</p>
-<pre class="r"><code>tail(data_csv)</code></pre>
+<pre class="r"><code>head(data_csv)</code></pre>
 </div>
 <div id="viewing-the-last-few-rows" class="section level3">
 <h3>Viewing the Last Few Rows</h3>
@@ -1233,7 +1233,298 @@ selection:</p>
 <div id="create-a-dataframe-with-everything-but-the-stage-column" class="section level4">
 <h4>Create a dataframe with everything BUT the “Stage” column</h4>
 <pre class="r"><code>stage_excluded_df &lt;- bonaire_fish_counts %&gt;% select(-Stage)</code></pre>
+<hr />
 </div>
+</div>
+</div>
+</div>
+<div id="week-4" class="section level1">
+<h1>Week 4</h1>
+<div id="load-data" class="section level3">
+<h3>Load Data</h3>
+<p>Whenever you close your R session, all objects in memory—such as data
+frames, variables, and function definitions—are cleared from the global
+environment.</p>
+<p><strong>This means you need to reload your data frames and other
+objects from their sources each time you start a fresh session (closing
+and opening RStudio).</strong></p>
+<p>Typically, I have two sections at the top of my R scripts that
+involve:</p>
+<ul>
+<li><p><strong>Reading in data</strong></p></li>
+<li><p><strong>Loading libraries</strong></p></li>
+</ul>
+<p>Example of the top of one of my scripts:</p>
+<p><img role="img" src="images/Screenshot%202025-02-23%20at%207.54.20%20PM.png" width="495" /></p>
+<p>By organizing your data-loading and setup code, you can quickly
+re-establish your working environment in any new session. This practice
+also makes it easier to share your workflow with collaborators, as they
+can replicate your setup by rerunning the same scripts in their own R
+environment.</p>
+<pre class="r"><code>library(tidyverse)
+
+bonaire_fish_counts &lt;- read.csv(&quot;/Users/allyiscool/Desktop/R seminar - spring 2025/bonaire_2023_fish_counts_seminar.csv&quot;)</code></pre>
+</div>
+<div id="tidyverse-1" class="section level2">
+<h2><u>TIDYVERSE</u></h2>
+<div id="selecting-specific-columns" class="section level3">
+<h3>Selecting Specific Columns</h3>
+<p>Syntax for using <code>select()</code> from the <code>dplyr</code>
+package:</p>
+<pre class="r"><code>## KEEPS column_name1, column_name2, column_name3
+subset_df &lt;- original_df %&gt;% 
+    select(column_name1, column_name2, column_name3)
+
+## GETS RID OF column_name1, column_name2, column_name3
+subset_df &lt;- original_df %&gt;% 
+    select(-column_name1, -column_name2, -column_name3)</code></pre>
+<p>Use <code>colnames()</code> to help you easily copy and paste the
+column names:</p>
+<pre class="r"><code>colnames(bonaire_fish_counts)</code></pre>
+<pre><code>## [1] &quot;Site&quot;        &quot;Date&quot;        &quot;Survey_code&quot; &quot;Species&quot;     &quot;Size&quot;       
+## [6] &quot;Number&quot;      &quot;Stage&quot;</code></pre>
+<pre class="r"><code>site_species_df &lt;- bonaire_fish_counts %&gt;% 
+    select(Site, Species)</code></pre>
+<hr />
+</div>
+<div id="adding-a-new-column" class="section level3">
+<h3>Adding a New Column</h3>
+<p>The <code>mutate()</code> function in the
+<strong><code>dplyr</code></strong> package allows you to <strong>add
+new columns</strong> or <strong>modify existing columns</strong> in a
+data frame while retaining the rest of your data structure.</p>
+<p>Here’s some generic syntax, but note that these are just examples,
+there are many ways to mutate a column using all the functions available
+to you!</p>
+<pre class="r"><code>## create a new column with new data
+original_df &lt;- original_df %&gt;%
+    mutate(new_column1 = new_data) 
+
+## create a new column based on some expression involving existing columns
+original_df &lt;- original_df %&gt;%
+    mutate(new_column2 = old_column1 + oldcolumn2)
+
+## create a new column based on some function on another column
+original_df &lt;- original_df %&gt;%
+    mutate(new_column3 = mean(old_column4))
+
+## modify an existing column (this replaces the old data in that column)
+original_df &lt;- original_df %&gt;%
+    mutate(old_column = 10 * old_column)</code></pre>
+<p><strong>Using our data:</strong></p>
+<pre class="r"><code>## Creates a new column called `index` that gives each row a unique number value
+bonaire_fish_counts &lt;- bonaire_fish_counts %&gt;%
+    mutate(index = 1:nrow(bonaire_fish_counts))
+
+## Creates a new column called `observer` that takes the first two characters of the character strings in the Survey_code column
+bonaire_fish_counts &lt;- bonaire_fish_counts %&gt;%
+    mutate(observer = substr(Survey_code, 1, 2))
+
+## Creates a new column called `size_mm` that is the Size column multiplying by 10
+bonaire_fish_counts &lt;- bonaire_fish_counts %&gt;%
+    mutate(size_mm = Size * 10)</code></pre>
+<p>Notice that I am not creating a new dataframe each time because I
+just want my new columns in my existing dataframe, unless I am
+overwriting a column (which I probably wouldn’t do)</p>
+<hr />
+</div>
+<div id="grouping-and-summarizing-data" class="section level3">
+<h3>Grouping and Summarizing Data</h3>
+<p>In <strong><code>dplyr</code></strong>, <code>group_by()</code> is
+used to split your dataset into groups based on one or more columns.</p>
+<p>You then use <code>summarize()</code> (or <code>summarise()</code>)
+to reduce each group to a single row by applying summary functions
+(e.g., <code>mean()</code>, <code>sum()</code>, <code>n()</code>).</p>
+<p>This combination allows you to swiftly aggregate data, like counting
+the number of observations per group or calculating a group-specific
+average.</p>
+<p>Examples of grouping variables:</p>
+<ul>
+<li><strong>Category/Type</strong> (e.g. species, treatment)</li>
+<li><strong>Site/Location</strong></li>
+<li><strong>Time Period</strong> (e.g., year, month)</li>
+<li><strong>Demographics</strong> (e.g., sex, age group)</li>
+</ul>
+<p>Here’s a generic syntax example:</p>
+<pre class="r"><code>summarized_df &lt;- original_df %&gt;%
+  group_by(group_column1, 
+           group_column2) %&gt;%
+  summarize(summary_stat_column1 = function(column_to_summarize1),
+            summary_stat_solumn2 = function(column_to_summarize2))</code></pre>
+<p>Because you are reducing your data to the number of rows equivalent
+to your unique groupings, make sure you are saving it as a new
+<code>summarized_df</code></p>
+<div id="average-size-by-species" class="section level4">
+<h4>Average Size by Species</h4>
+<pre class="r"><code>avg_size &lt;- bonaire_fish_counts %&gt;% 
+    group_by(Species) %&gt;% 
+    summarize(avg_size = mean(Size, na.rm = TRUE))
+
+unique(bonaire_fish_counts$Species)</code></pre>
+<pre><code>##  [1] &quot;Princess parrrotfish&quot;   &quot;Ocean surgeonfish&quot;      &quot;Redband parrotfish&quot;    
+##  [4] &quot;Foureye butterflyfish&quot;  &quot;Queen parrotfish&quot;       &quot;Blue tang&quot;             
+##  [7] &quot;Orangespotted filefish&quot; &quot;Stoplight parrotfish&quot;   &quot;Striped parrotfish&quot;    
+## [10] &quot;Banded butterflyfish&quot;   &quot;Yellowtail hamlet&quot;      &quot;Barred hamlet&quot;         
+## [13] &quot;Saddled parrotfish&quot;     &quot;No Fish&quot;                &quot;Butter hamlet&quot;         
+## [16] NA                       &quot;Black durgon&quot;           &quot;Spotfin butterflyfish&quot; 
+## [19] &quot;Yellowtail parrotfish&quot;  &quot;Redtail parrotfish&quot;     &quot;Black hamlet?&quot;         
+## [22] &quot;Doctorfish&quot;             &quot;Goldentail moray&quot;       &quot;Eel&quot;                   
+## [25] &quot;Hamlet&quot;                 &quot;Whitespotted filefish&quot;  &quot;Eagle ray&quot;             
+## [28] &quot;Squid&quot;                  &quot;Turtle&quot;                 &quot;  &quot;</code></pre>
+<pre class="r"><code>length(unique(bonaire_fish_counts$Species)) ##wrapping the above code within `length()` will give you how many objects are in that vector</code></pre>
+<pre><code>## [1] 30</code></pre>
+<p>This should have the same number of rows as unique species in our
+dataset (30).</p>
+</div>
+<div id="average-size-by-species-and-site" class="section level4">
+<h4>Average Size by Species and Site</h4>
+<pre class="r"><code>avg_size_by_site &lt;- bonaire_fish_counts %&gt;% 
+    group_by(Species,
+             Site) %&gt;% 
+    summarize(avg_size = mean(Size, na.rm = TRUE))</code></pre>
+<pre><code>## `summarise()` has grouped output by &#39;Species&#39;. You can override using the
+## `.groups` argument.</code></pre>
+<pre class="r"><code>length(unique(bonaire_fish_counts$Species))</code></pre>
+<pre><code>## [1] 30</code></pre>
+<pre class="r"><code>length(unique(bonaire_fish_counts$Site))</code></pre>
+<pre><code>## [1] 7</code></pre>
+<p>This will give you the mean size of each species seen at each
+site.</p>
+<p><strong>NOTICE</strong> that we should expect it to have 210 rows (we
+have 30 unique species and 7 unique sites), however we only have 115
+rows. This is because this dataframe as it is set up only includes the
+counts for things seen and does not include 0s for species not seen.
+Therefore if a orange-spotted filefish was never seen at Margate Bay,
+there is going to be no indication of that in the data. Keep this in
+mind for your own data because you often want to represent those zeroes!
+Later, we will show you ways of expanding your dataset based on groups
+you want fully intercrossed.</p>
+</div>
+<div id="counting-observations" class="section level4">
+<h4>Counting Observations</h4>
+<p>The function <code>n()</code> is used to count the number of
+observations in each group within the <code>summarize()</code> function.
+It simply returns the total number of rows in the group.</p>
+</div>
+<div id="number-of-rows-per-species-per-site" class="section level4">
+<h4>Number of Rows Per Species per Site</h4>
+<pre class="r"><code>number_of_rows &lt;- bonaire_fish_counts %&gt;% 
+    group_by(Site, 
+             Species) %&gt;% 
+    summarize(count = n())</code></pre>
+<pre><code>## `summarise()` has grouped output by &#39;Site&#39;. You can override using the
+## `.groups` argument.</code></pre>
+<p><u><strong>NOTE:</strong></u> This is not the sum of all the fish
+seen at that site, because it is simply counting the rows within the
+group of Site - Species. So I may have 3 observations of banded
+butterflyfish at Angel City, but within those 3 observations the I have
+2 fish at 5 cm, 1 fish at 6cm, and 3 at 7cm. <code>n()</code> would
+return the number 3, while <code>sum(Number)</code> would return the
+number 6.</p>
+</div>
+<div id="unique-species-count-per-site" class="section level4">
+<h4>Unique Species Count per Site</h4>
+<p>The function <code>n_distinct()</code> counts the number of unique
+values in a column for each group. It is useful when you want to know
+how many distinct entries exist in a column, like for us species
+richness:</p>
+<pre class="r"><code>species_richness_per_site &lt;- bonaire_fish_counts %&gt;%
+    group_by(Site) %&gt;%
+    summarize(unique_species_count = n_distinct(Species))</code></pre>
+<p>You can stack multiple summary functions:</p>
+<pre class="r"><code>summarized_df &lt;- bonaire_fish_counts %&gt;% 
+    group_by(Site, 
+             Species) %&gt;% 
+    summarize(avg_fish_size_cm = mean(Size, na.rm = TRUE),
+              sd_fish_size_cm = sd(Size, na.rm = TRUE),
+              fish_abundance = sum(Number, na.rm = TRUE))</code></pre>
+<p>Hey! That didn’t run - looks like something weird is happening in the
+Number column - would probably want to take a look at that column at
+some point. Here it is without that:</p>
+<pre class="r"><code>summarized_df &lt;- bonaire_fish_counts %&gt;% 
+    group_by(Site, 
+             Species) %&gt;% 
+    summarize(avg_fish_size_cm = mean(Size, na.rm = TRUE),
+              sd_fish_size_cm = sd(Size, na.rm = TRUE))</code></pre>
+<pre><code>## `summarise()` has grouped output by &#39;Site&#39;. You can override using the
+## `.groups` argument.</code></pre>
+<p>Remember that when you combine <code>group_by()</code> with
+<code>summarize()</code>, the result is a new data frame which, by
+default, only contains:</p>
+<ul>
+<li><p>The <strong>grouping columns</strong> specified in
+<code>group_by()</code>.</p></li>
+<li><p>The <strong>newly created summary columns</strong> from
+<code>summarize()</code>.</p></li>
+</ul>
+<p>All <strong>non-grouping</strong> columns that are not summarized
+will be dropped in the result.</p>
+<p>If you want to keep certain columns that aren’t directly summarized,
+you need to include them in <code>group_by()</code> (making them part of
+the grouping). That way, those columns will be preserved in the
+group-level output. Just make sure that it doesn’t split you into more
+groups than you intend.</p>
+</div>
+</div>
+</div>
+<div id="activities" class="section level2">
+<h2>Activities</h2>
+<div id="activity-1-filter-out-irrelevant-species" class="section level3">
+<h3>Activity 1: Filter Out Irrelevant Species</h3>
+<pre class="r"><code>unique(bonaire_fish_counts$Species)</code></pre>
+<pre><code>##  [1] &quot;Princess parrrotfish&quot;   &quot;Ocean surgeonfish&quot;      &quot;Redband parrotfish&quot;    
+##  [4] &quot;Foureye butterflyfish&quot;  &quot;Queen parrotfish&quot;       &quot;Blue tang&quot;             
+##  [7] &quot;Orangespotted filefish&quot; &quot;Stoplight parrotfish&quot;   &quot;Striped parrotfish&quot;    
+## [10] &quot;Banded butterflyfish&quot;   &quot;Yellowtail hamlet&quot;      &quot;Barred hamlet&quot;         
+## [13] &quot;Saddled parrotfish&quot;     &quot;No Fish&quot;                &quot;Butter hamlet&quot;         
+## [16] NA                       &quot;Black durgon&quot;           &quot;Spotfin butterflyfish&quot; 
+## [19] &quot;Yellowtail parrotfish&quot;  &quot;Redtail parrotfish&quot;     &quot;Black hamlet?&quot;         
+## [22] &quot;Doctorfish&quot;             &quot;Goldentail moray&quot;       &quot;Eel&quot;                   
+## [25] &quot;Hamlet&quot;                 &quot;Whitespotted filefish&quot;  &quot;Eagle ray&quot;             
+## [28] &quot;Squid&quot;                  &quot;Turtle&quot;                 &quot;  &quot;</code></pre>
+<pre class="r"><code>#Creates a character vector named fish_to_remove. It lists all the fish species you don’t want in your final dataframe.
+fish_to_remove &lt;- c(&quot;Eagle ray&quot;, 
+                    &quot;Eel&quot;, 
+                    &quot;Squid&quot;, 
+                    &quot;Turtle&quot;, 
+                    &quot;Hamlet&quot;, 
+                    &quot;Goldentail moray&quot;)
+
+# The condition !(Species %in% fish_to_remove) means: keep rows where Species is not found in the fish_to_remove list.
+# Excludes rows that contain any of the species in fish_to_remove
+cleaned_data &lt;- bonaire_fish_counts %&gt;%
+    filter(!(Species %in% fish_to_remove))</code></pre>
+<p>The <code>%in%</code> operator checks whether each element of a
+vector is found in another vector or list. It returns a logical vector
+of the same length as the first vector, indicating <code>TRUE</code> for
+every element that matches something in the second vector, and
+<code>FALSE</code> if it does not.</p>
+<p>Essentially, it is assigning a <code>TRUE</code> or
+<code>FALSE</code> to every element in the column Species about whether
+or not that element matches an element in fish_to_remove. Usually,
+everything that is a <code>FALSE</code> is filtered out, which would
+leave us with only the rows where a Species column character string
+matched something (what we don’t want). By wrapping
+<code>Species %in% fish_to_remove</code> in <code>!()</code> we reverse
+the <code>TRUE</code> or <code>FALSE</code> , which then keeps only the
+rows where a Species column character string did NOT match something
+(what we DO want)</p>
+<p>For the <code>filter()</code> function, it is always doing this - you
+provide a condition (size &gt;10 or species = “parrotfish”) to which it
+assigns a <code>TRUE</code> or <code>FALSE</code> value and then keeps
+only <code>TRUE</code> values.</p>
+<hr />
+</div>
+<div id="activity-2-filter-data-for-selected-sites" class="section level3">
+<h3>Activity 2: Filter Data for Selected Sites</h3>
+<pre class="r"><code>unique(bonaire_fish_counts$Site)</code></pre>
+<pre><code>## [1] &quot;PuntVierkant&quot; &quot;TorisReef&quot;    &quot;SaltPier&quot;     &quot;MargateBay&quot;   &quot;AngelCity&quot;   
+## [6] &quot;SaltCity&quot;     &quot;PinkBeach&quot;</code></pre>
+<pre class="r"><code>wanted_sites &lt;- c(&quot;AngelCity&quot;, 
+                  &quot;PuntVierkant&quot;)
+
+AC_PV_data &lt;- bonaire_fish_counts %&gt;% 
+    filter(Site %in% wanted_sites)</code></pre>
 </div>
 </div>
 </div>
